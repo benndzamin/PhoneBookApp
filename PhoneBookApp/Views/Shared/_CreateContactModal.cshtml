@@ -1,0 +1,56 @@
+﻿<!-- Modal -->
+<div id="createContactModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="createContactModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title" id="createContactModalLabel">Create Contact</h5>
+                <button type="button" class="btn btn-close btn-outline-light" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="createContactForm">
+                    <div class="mb-2">
+                        <label for="firstName" class="form-label mb-0">First Name</label>
+                        <input type="text" class="form-control" id="firstName" required>
+                    </div>
+                    <div class="mb-2">
+                        <label for="lastName" class="form-label mb-0">Last Name</label>
+                        <input type="text" class="form-control" id="lastName" required>
+                    </div>
+                    <div class="mb-2">
+                        <label for="phoneNumber" class="form-label mb-0">Phone Number</label>
+                        <input type="text" class="form-control" id="phoneNumber" required>
+                    </div>
+                    <div class="mb-2">
+                        <label for="email" class="form-label mb-0">Email</label>
+                        <input type="email" class="form-control" id="email" required>
+                    </div>
+                    <div class="mb-2">
+                        <label for="birthDate" class="form-label mb-0">Birth Date</label>
+                        <input type="date" class="form-control" id="birthDate" required>
+                    </div>
+                    <div class="mb-2">
+                        <label for="gender" class="form-label mb-0">Gender</label>
+                        <select class="form-select" id="gender" required>
+                            <option value="1">Male</option>
+                            <option value="0">Female</option>
+                        </select>
+                    </div>
+                    <div class="mb-0">
+                        <label for="countryId" class="form-label mb-0">Country</label>
+                        <select type="text" class="form-control" id="countryId" required>
+                        </select>
+                    </div>
+                    <div class="mb-2">
+                        <label for="cityId" class="form-label mb-0">City</label>
+                        <select type="text" class="form-control" id="cityId" required>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-success" onclick="createContact()" id="saveButton">Save</button>
+            </div>
+        </div>
+    </div>
+</div>

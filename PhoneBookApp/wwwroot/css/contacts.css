@@ -1,0 +1,57 @@
+﻿.gender-icon {
+    display: inline-block;
+    width: 20px; /* Povećaj veličinu kružića */
+    height: 20px;
+    border-radius: 50%;
+    margin: 0 auto;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3); /* Dodaj sjenčanje za bolji kontrast */
+    transition: all 0.3s ease; /* Dodaj prijelaz za glatke promjene boje */
+
+    /*centriranje u parent elementu*/
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.male {
+    background-color: #007bff; /* Promijenjena nijansa plave za bolji kontrast */
+}
+
+.female {
+    background-color: #e83e8c; /* Promijenjena nijansa crvene */
+}
+
+.gender-icon:hover {
+    transform: scale(1.2); /* Malo uvećaj kružić pri hoveru */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Povećaj sjenčanje pri hoveru */
+}
+
+
+
+.pagination {
+    margin-top: 20px;
+    font-size: 1.1rem;
+}
+
+    .pagination .page-item.disabled .page-link {
+        color: #6c757d; /* Siva boja za neaktivnu stranicu */
+        background-color: #f8f9fa;
+        border-color: #f8f9fa;
+    }
+
+    .pagination .page-item.active .page-link {
+        background-color: #007bff;
+        border-color: #007bff;
+        color: white;
+    }
+
+    .pagination .page-item .page-link {
+        border-radius: 50px;
+        padding: 10px 20px;
+        transition: background-color 0.3s, color 0.3s;
+    }
+
+        .pagination .page-item .page-link:hover {
+            background-color: #0056b3;
+            color: white;
+        }
