@@ -1,4 +1,35 @@
+# Windows build files
+Thumbs.db
+ehthumbs.db
+
+# .NET build directories
+bin/
+obj/
+
+# User-specific files
+*.user
+*.userosscache
+*.suo
+*.userprefs
+
+# ASP.NET Scaffolding
+ScaffoldingReadMe.txt
+
+# Rider
+.idea/
+
+# VS Code
+.vscode/
+
 # Visual Studio
 .vs/
 .vsconfig
-.idea/
+
+# App settings (sensitive data)
+appsettings*.json
+
+# Test results
+test-results/
+
+# NuGet packages
+packages/
