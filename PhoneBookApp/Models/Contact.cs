@@ -19,11 +19,11 @@ namespace PhoneBookApp.Models
         public required string Email { get; set; }
         public DateTime BirthDate { get; set; }
 
-        [NotMapped] // Ovo znači da se neće čuvati u bazi
+        [NotMapped] // neće se čuvati u bazi
         public int Age => DateTime.Now.Year - BirthDate.Year -
                       (DateTime.Now.DayOfYear < BirthDate.DayOfYear ? 1 : 0); // zaokruživanje godina (provjera rođendana)
 
-        // Ova osobina konvertuje enum u ljudski čitljiv tekst
+        // konvertuje enum u ljudski čitljiv tekst
         [NotMapped] // Ne čuva se u bazi
         public string GenderDisplay => Gender == Gender.Male ? "Male" : "Female";
 
@@ -33,7 +33,7 @@ namespace PhoneBookApp.Models
         public int CountryId { get; set; }
         public Country? Country { get; set; }
 
-        // Ovo je novi property koji formatira datum
+        // formatiranje datuma
         public string FormattedBirthDate
         {
             get

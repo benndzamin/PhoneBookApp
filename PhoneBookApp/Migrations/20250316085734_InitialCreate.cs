@@ -82,8 +82,10 @@ namespace PhoneBookApp.Migrations
                 values: new object[,]
                 {
                     { 1, "Bosna i Hercegovina" },
-                    { 2, "Hrvatska" },
-                    { 3, "Srbija" }
+                    { 2, "Croatia" },
+                    { 3, "Serbia" },
+                    { 4, "Austria" },
+                    { 5, "Germany" }
                 });
 
             migrationBuilder.InsertData(
@@ -97,11 +99,20 @@ namespace PhoneBookApp.Migrations
                     { 4, 1, "Zenica" },
                     { 5, 2, "Zagreb" },
                     { 6, 2, "Split" },
-                    { 8, 2, "Dubrovnik" },
-                    { 9, 2, "Rijeka" },
-                    { 10, 3, "Novi Sad" },
-                    { 11, 3, "Beograd" },
-                    { 12, 3, "Niš" }
+                    { 7, 2, "Dubrovnik" },
+                    { 8, 2, "Rijeka" },
+                    { 9, 3, "Novi Sad" },
+                    { 10, 3, "Beograd" },
+                    { 11, 3, "Niš" },
+                    { 12, 3, "Kragujevac" },
+                    { 13, 4, "Wien" },
+                    { 14, 4, "Graz" },
+                    { 15, 4, "Linz" },
+                    { 16, 4, "Salzburg" },
+                    { 17, 5, "Berlin" },
+                    { 18, 5, "Hamburg" },
+                    { 19, 5, "München" },
+                    { 20, 5, "Köln" }
                 });
 
             migrationBuilder.InsertData(
@@ -109,9 +120,16 @@ namespace PhoneBookApp.Migrations
                 columns: new[] { "Id", "BirthDate", "CityId", "CountryId", "Email", "FirstName", "Gender", "LastName", "PhoneNumber" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(1985, 5, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, 1, "johndoe@example.com", "John", 1, "Doe", "123456789" },
-                    { 2, new DateTime(1990, 10, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), 5, 2, "janedoe@example.com", "Jane", 0, "Doe", "987654321" },
-                    { 3, new DateTime(1980, 7, 20, 0, 0, 0, 0, DateTimeKind.Unspecified), 10, 3, "marksmith@example.com", "Mark", 1, "Smith", "555555555" }
+                    { 1, new DateTime(1985, 5, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, 1, "johndoe@example.com", "John", 1, "Doe", "123/456-789" },
+                    { 2, new DateTime(1990, 10, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), 5, 2, "janedoe@example.com", "Jane", 0, "Doe", "987/654-321" },
+                    { 3, new DateTime(1980, 7, 20, 0, 0, 0, 0, DateTimeKind.Unspecified), 10, 3, "marksmith@example.com", "Mark", 1, "Smith", "555/555-555" },
+                    { 4, new DateTime(1985, 5, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 16, 4, "ibrahim@example.com", "Ibrahim", 1, "Hasić", "123/456-789" },
+                    { 5, new DateTime(1990, 10, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), 3, 1, "amira@example.com", "Amira", 0, "Džanić", "987/654-321" },
+                    { 6, new DateTime(1980, 7, 20, 0, 0, 0, 0, DateTimeKind.Unspecified), 8, 2, "hasan@example.com", "Hasan", 1, "Selimović", "555/555-555" },
+                    { 7, new DateTime(1992, 1, 12, 0, 0, 0, 0, DateTimeKind.Unspecified), 14, 4, "elma@example.com", "Elma", 0, "Begović", "321/654-987" },
+                    { 8, new DateTime(1989, 9, 18, 0, 0, 0, 0, DateTimeKind.Unspecified), 20, 5, "mirza@example.com", "Mirza", 1, "Kovačević", "123/321-456" },
+                    { 9, new DateTime(1995, 11, 22, 0, 0, 0, 0, DateTimeKind.Unspecified), 13, 4, "maja@example.com", "Maja", 0, "Avdagić", "654/987-321" },
+                    { 10, new DateTime(1987, 4, 7, 0, 0, 0, 0, DateTimeKind.Unspecified), 7, 2, "nedim@example.com", "Nedim", 1, "Salkanović", "987/123-654" }
                 });
 
             migrationBuilder.CreateIndex(

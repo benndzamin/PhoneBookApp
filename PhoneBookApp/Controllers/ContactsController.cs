@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.Metrics;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PhoneBookApp.Data;
@@ -50,22 +45,7 @@ namespace PhoneBookApp.Controllers
         public async Task<IActionResult> GetContactsById(int id)
         {
             var contact = await _context.Contacts
-                .Include(c => c.City)
-                .Include(c => c.Country)
                 .Where(c => c.Id == id)
-                .Select(c => new
-                {
-                    c.Id,
-                    c.FirstName,
-                    c.LastName,
-                    c.PhoneNumber,
-                    c.Gender,
-                    c.Email,
-                    c.BirthDate,
-                    c.Age,
-                    c.CountryId,
-                    c.CityId
-                })
                 .FirstOrDefaultAsync();
 
             if (contact == null)
@@ -102,16 +82,16 @@ namespace PhoneBookApp.Controllers
             // Ako kontakt nije pronađen, vraća se error message
             if (contact == null)
             {
-                return Json(new { success = false, message = "Kontakt nije pronađen!" });
+                return Json(new { success = false, message = "Kontakt not found!" });
             }
 
             // Brisanje kontakta
             _context.Contacts.Remove(contact);
 
-            // Snimanje promjene u bazi podataka
+            // Snimanje promjene u bazi
             await _context.SaveChangesAsync();
 
-            // Vrati uspešan odgovor
+            // Vraća uspješan odgovor
             return Json(new { success = true, message = "Contact deleted successfully!" });
         }
 
@@ -122,7 +102,7 @@ namespace PhoneBookApp.Controllers
         {
             if (contact == null)
             {
-                return Json(new { success = false, message = "Invalid contact data" });
+                return Json(new { success = false, message = "Invalid contact data!" });
             }
             if (ModelState.IsValid)
             {
@@ -134,7 +114,7 @@ namespace PhoneBookApp.Controllers
                 return Json(new { success = true, message = "Contact saved successfully!" });
             }
 
-            // Ako podaci nisu ispravni, vraća se greška
+            // Ako podaci nisu ispravni, vraća  grešku
             return Json(new { success = false });
         }
 
@@ -145,16 +125,16 @@ namespace PhoneBookApp.Controllers
         {
             if (contactData == null || id != contactData.Id)
             {
-                return Json(new { success = false, message = "Neispravni podaci kontakta." });
+                return Json(new { success = false, message = "Invalid user data!" });
             }
 
             var contact = await _context.Contacts.FindAsync(id);
             if (contact == null)
             {
-                return Json(new { success = false, message = "Kontakt nije pronađen!" });
+                return Json(new { success = false, message = "Contact not found!" });
             }
 
-            // Ažuriranje podataka kontakta
+            // edit podataka kontakta
             contact.FirstName = contactData.FirstName;
             contact.LastName = contactData.LastName;
             contact.PhoneNumber = contactData.PhoneNumber;
@@ -165,11 +145,11 @@ namespace PhoneBookApp.Controllers
             contact.CountryId = contactData.CountryId;
 
             await _context.SaveChangesAsync();
-            return Json(new { success = true, message = "Kontakt ažuriran uspješno!" });
+            return Json(new { success = true, message = "Contact edited successfully!" });
         }
 
 
-        //Dodavanje svih država
+        //Endpoint za dodavanje svih država
         public async Task<IActionResult> GetCountries()
         {
             var countries = await _context.Countries
@@ -183,7 +163,7 @@ namespace PhoneBookApp.Controllers
             return Json(countries);
         }
 
-        //Dodavanje gradova po državi
+        //Endpoint za dodavanje gradova po ID-ju države
         public async Task<IActionResult> GetCitiesByCountry(int countryId)
         {
             if (countryId == 0)

@@ -2,7 +2,7 @@
 <div id="createContactModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="createContactModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-md" role="document">
         <div class="modal-content">
-            <div class="modal-header bg-primary text-white">
+            <div class="modal-header bg-primary text-white" id="headerColor">
                 <h5 class="modal-title" id="createContactModalLabel">Create Contact</h5>
                 <button type="button" class="btn btn-close btn-outline-light" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -31,6 +31,7 @@
                     <div class="mb-2">
                         <label for="gender" class="form-label mb-0">Gender</label>
                         <select class="form-select" id="gender" required>
+                            <option value="" disabled selected hidden>Select gender</option>
                             <option value="1">Male</option>
                             <option value="0">Female</option>
                         </select>

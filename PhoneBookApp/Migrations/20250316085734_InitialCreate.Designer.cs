@@ -12,7 +12,7 @@ using PhoneBookApp.Data;
 namespace PhoneBookApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250311102841_InitialCreate")]
+    [Migration("20250316085734_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -86,33 +86,87 @@ namespace PhoneBookApp.Migrations
                         },
                         new
                         {
-                            Id = 8,
+                            Id = 7,
                             CountryId = 2,
                             Name = "Dubrovnik"
                         },
                         new
                         {
-                            Id = 9,
+                            Id = 8,
                             CountryId = 2,
                             Name = "Rijeka"
                         },
                         new
                         {
-                            Id = 10,
+                            Id = 9,
                             CountryId = 3,
                             Name = "Novi Sad"
                         },
                         new
                         {
-                            Id = 11,
+                            Id = 10,
                             CountryId = 3,
                             Name = "Beograd"
                         },
                         new
                         {
-                            Id = 12,
+                            Id = 11,
                             CountryId = 3,
                             Name = "Niš"
+                        },
+                        new
+                        {
+                            Id = 12,
+                            CountryId = 3,
+                            Name = "Kragujevac"
+                        },
+                        new
+                        {
+                            Id = 13,
+                            CountryId = 4,
+                            Name = "Wien"
+                        },
+                        new
+                        {
+                            Id = 14,
+                            CountryId = 4,
+                            Name = "Graz"
+                        },
+                        new
+                        {
+                            Id = 15,
+                            CountryId = 4,
+                            Name = "Linz"
+                        },
+                        new
+                        {
+                            Id = 16,
+                            CountryId = 4,
+                            Name = "Salzburg"
+                        },
+                        new
+                        {
+                            Id = 17,
+                            CountryId = 5,
+                            Name = "Berlin"
+                        },
+                        new
+                        {
+                            Id = 18,
+                            CountryId = 5,
+                            Name = "Hamburg"
+                        },
+                        new
+                        {
+                            Id = 19,
+                            CountryId = 5,
+                            Name = "München"
+                        },
+                        new
+                        {
+                            Id = 20,
+                            CountryId = 5,
+                            Name = "Köln"
                         });
                 });
 
@@ -175,7 +229,7 @@ namespace PhoneBookApp.Migrations
                             FirstName = "John",
                             Gender = 1,
                             LastName = "Doe",
-                            PhoneNumber = "123456789"
+                            PhoneNumber = "123/456-789"
                         },
                         new
                         {
@@ -187,7 +241,7 @@ namespace PhoneBookApp.Migrations
                             FirstName = "Jane",
                             Gender = 0,
                             LastName = "Doe",
-                            PhoneNumber = "987654321"
+                            PhoneNumber = "987/654-321"
                         },
                         new
                         {
@@ -199,7 +253,91 @@ namespace PhoneBookApp.Migrations
                             FirstName = "Mark",
                             Gender = 1,
                             LastName = "Smith",
-                            PhoneNumber = "555555555"
+                            PhoneNumber = "555/555-555"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            BirthDate = new DateTime(1985, 5, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CityId = 16,
+                            CountryId = 4,
+                            Email = "ibrahim@example.com",
+                            FirstName = "Ibrahim",
+                            Gender = 1,
+                            LastName = "Hasić",
+                            PhoneNumber = "123/456-789"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            BirthDate = new DateTime(1990, 10, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CityId = 3,
+                            CountryId = 1,
+                            Email = "amira@example.com",
+                            FirstName = "Amira",
+                            Gender = 0,
+                            LastName = "Džanić",
+                            PhoneNumber = "987/654-321"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            BirthDate = new DateTime(1980, 7, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CityId = 8,
+                            CountryId = 2,
+                            Email = "hasan@example.com",
+                            FirstName = "Hasan",
+                            Gender = 1,
+                            LastName = "Selimović",
+                            PhoneNumber = "555/555-555"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            BirthDate = new DateTime(1992, 1, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CityId = 14,
+                            CountryId = 4,
+                            Email = "elma@example.com",
+                            FirstName = "Elma",
+                            Gender = 0,
+                            LastName = "Begović",
+                            PhoneNumber = "321/654-987"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            BirthDate = new DateTime(1989, 9, 18, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CityId = 20,
+                            CountryId = 5,
+                            Email = "mirza@example.com",
+                            FirstName = "Mirza",
+                            Gender = 1,
+                            LastName = "Kovačević",
+                            PhoneNumber = "123/321-456"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            BirthDate = new DateTime(1995, 11, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CityId = 13,
+                            CountryId = 4,
+                            Email = "maja@example.com",
+                            FirstName = "Maja",
+                            Gender = 0,
+                            LastName = "Avdagić",
+                            PhoneNumber = "654/987-321"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            BirthDate = new DateTime(1987, 4, 7, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CityId = 7,
+                            CountryId = 2,
+                            Email = "nedim@example.com",
+                            FirstName = "Nedim",
+                            Gender = 1,
+                            LastName = "Salkanović",
+                            PhoneNumber = "987/123-654"
                         });
                 });
 
@@ -229,12 +367,22 @@ namespace PhoneBookApp.Migrations
                         new
                         {
                             Id = 2,
-                            Name = "Hrvatska"
+                            Name = "Croatia"
                         },
                         new
                         {
                             Id = 3,
-                            Name = "Srbija"
+                            Name = "Serbia"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Austria"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "Germany"
                         });
                 });
 

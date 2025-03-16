@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using PhoneBookApp.Data;
 
 var builder = WebApplication.CreateBuilder(args);

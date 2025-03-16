@@ -2,12 +2,12 @@
     loadContacts();
 
 
-    //fetchanje svih drzava
+    //ajax za fetchanje svih drzava
     $.ajax({
         url: '/Contacts/GetCountries', // Endpoint za dohvat država
         type: 'GET',
         success: function (data) {
-            var countryDropdown = $('#countryId');
+            let countryDropdown = $('#countryId');
             countryDropdown.empty();
             countryDropdown.append($('<option>', { value: '', text: 'Select Country' }));
             $.each(data, function (index, country) {
@@ -22,14 +22,14 @@
         }
     });
 
-    var cityDropdown = $('#cityId');
-    cityDropdown.prop('disabled', true); // Onemogući dropdown Cities dok se ne odabere država
-    cityDropdown.empty().append($('<option>', { value: '', text: 'Odaberite državu' })); // Inicijalna prazna opcija dok se ne odabere država
+    let cityDropdown = $('#cityId');
+    cityDropdown.prop('disabled', true); // Onemogućen dropdown Cities sve dok se ne odabere država
+    cityDropdown.empty().append($('<option>', { value: '', text: 'Select country first' })); // Inicijalna prazna opcija dok se ne odabere država
 
 
     //na promjenu dropdowna Country fetchanje date za dropdown Cities
     $('#countryId').on('change', function () {
-        var countryId = $(this).val();
+        let countryId = $(this).val();
         cityDropdown.empty(); // Očisti postojeće opcije gradova
 
         if (countryId) {
@@ -38,8 +38,8 @@
                 type: 'GET',
                 data: { countryId: countryId },
                 success: function (data) {
-                    cityDropdown.prop('disabled', false); // Omogući dropdown
-                    cityDropdown.append($('<option>', { value: '', text: 'Odaberite grad' })); // Dodaj default opciju
+                    cityDropdown.prop('disabled', false); // Omogući dropdown za odabir grada
+                    cityDropdown.append($('<option>', { value: '', text: 'Select city' })); // Dodaj default opciju za odabir grada
                     $.each(data, function (index, city) {
                         cityDropdown.append($('<option>', {
                             value: city.value,
@@ -50,7 +50,7 @@
             });
         } else {
             cityDropdown.prop('disabled', true); // Ako nije odabrana država, onemogući polje
-            cityDropdown.append($('<option>', { value: '', text: 'Odaberite državu' })); // Ponovno prikaži default opciju
+            cityDropdown.append($('<option>', { value: '', text: 'Select country' })); // Ponovno prikaži default opciju
         }
     });
 });
@@ -99,40 +99,29 @@ function loadContacts() {
 }
 
 
-// Funkcija za otvaranje modala kreiranja
+// Funkcija za otvaranje modala za kreiranje contacta "Add new contact"
 function openCreateModal() {
+    $('#createContactForm').trigger('reset'); //resetovanje forme
     $('#createContactModal').modal('show'); // Otvara modal
-    // Mijenja elemente modala, "Create New" na "Save Edited"
-    $('#createContactModalLabel').text('Edit Contact');
-    $('#saveButton').text('Save').attr('onclick', `createContact()`);
-}
+    $('#headerColor').removeClass('bg-info').addClass('bg-primary'); //postavlja željenu boju u header
+    $('#createContactModalLabel').text('Add new contact');// Postavlja naslov u headeru na "Add new contact"
+    $('#saveButton').text('Save').attr('onclick', `createContact()`); //dodaje text i funkcionalnost buttona
 
+    let cityDropdown = $('#cityId');
+    cityDropdown.prop('disabled', true); // Onemogućen dropdown Cities sve dok se ne odabere država
+    cityDropdown.empty().append($('<option>', { value: '', text: 'Select country first' })); // Inicijalna prazna opcija dok se ne odabere država
+}
 
 // Funkcija za otvaranje modala za brisanje
 function openDeleteModal(contactId, firstName, lastName) {
-    // Postavite ime i prezime kontakta u modal
-    $('#contactNameToDelete').text(firstName + ' ' + lastName);
-    // Spremite ID kontakta u data atribut modala
-    $('#deleteContactModal').data('contactId', contactId);
-    // Otvorite modal
-    $('#deleteContactModal').modal('show');
+    $('#contactNameToDelete').text(firstName + ' ' + lastName); // Postavlja ime i prezime kontakta u modal
+    $('#deleteContactModal').data('contactId', contactId); // Sprema ID kontakta u data atribut modala
+    $('#deleteContactModal').modal('show'); // Otvorite modal
 }
-
-// Dodajte event listener za klik na dugme za brisanje
-// Pretpostavljamo da imate dugmadi za brisanje u vašoj tabeli sa klasom 'delete-contact-btn'
-$(document).on('click', '.delete-contact-btn', function () {
-    // Preuzmite ID, ime i prezime kontakta iz atributa dugmeta
-    var contactId = $(this).data('id');
-    var firstName = $(this).data('first-name');
-    var lastName = $(this).data('last-name');
-    // Otvorite modal za brisanje
-    openDeleteModal(contactId, firstName, lastName);
-});
-
 
 // Funkcija za brisanje kontakta
 function deletingFn() {
-    var contactId = $('#deleteContactModal').data('contactId');
+    let contactId = $('#deleteContactModal').data('contactId');
     if (contactId) {
         // Pošaljite AJAX zahtjev za brisanje kontakta
         $.ajax({
@@ -243,6 +232,7 @@ function createContact() {
         countryId: parseInt($('#countryId').val(), 10)
     };
 
+    // AJAX za snimanje podataka
     $.ajax({
         url: '/Contacts/Create',
         type: 'POST',
@@ -254,7 +244,6 @@ function createContact() {
                 $('#createContactModal').modal('hide');
                 $('#createContactForm').trigger('reset');
                 showToast(response.message, 'success');
-                //Loadovanje svih kontakata
                 loadContacts();
             } else {
                 alert('Došlo je do greške pri kreiranju kontakta.');
@@ -269,9 +258,9 @@ function createContact() {
 
 //funkcija za editovanje kontakta
 function editContactModal(contactId) {
-    // Mijenja elemente modala, "Create New" na "Save Edited"
-    $('#createContactModalLabel').text('Edit Contact');
-    $('#saveButton').text('Save Edited').attr('onclick', `saveEditedContact(${contactId})`);
+    $('#createContactModalLabel').text('Edit Contact'); // Postavlja naslov u headeru na "Save edited"
+    $('#headerColor').removeClass('bg-primary').addClass('bg-info'); //postavlja željenu biju u header
+    $('#saveButton').text('Save Edited').attr('onclick', `saveEditedContact(${contactId})`); // Postavlja text "Save edited" i funkcionalnost buttona
 
     // AJAX poziv za dohvat podataka kontakta prema ID-u
     $.ajax({
@@ -289,25 +278,31 @@ function editContactModal(contactId) {
                 $('#birthDate').val(response.contact.birthDate.split('T')[0]);
                 $('#countryId').val(response.contact.countryId);
 
-                console.log("kontakt u edit modalu: ");
+                console.log("ovdje dođe: ");
                 console.log(response.contact);
 
                 // Popunjavanje dropdowna za gradove
-                var cityDropdown = $('#cityId').prop('disabled', false);
+                let cityDropdown = $('#cityId').prop('disabled', false);
                 cityDropdown.empty(); // Očisti postojeće gradove
 
                 // Dodaj gradove za odabranu državu
                 $.each(response.cities, function (index, city) {
-                    cityDropdown.append($('<option>', {
+                    let option = $('<option>', {
                         value: city.id,
                         text: city.name
-                    }));
+                    });
+
+                    // Selektuj grad koji je vezan za korisnika
+                    if (city.id === response.contact.cityId) {
+                        option.prop('selected', true);
+                    }
+                    cityDropdown.append(option);
                 });
 
-                // Otvoriti modal za edit
-                $('#createContactModal').modal('show'); // Otvara modal
+                // Otvaranje modal za edit
+                $('#createContactModal').modal('show');
             } else {
-                alert('Došlo je do greške pri dohvaćanju podataka kontakta.');
+                alert('Error fetcing contact data.');
             }
         },
         error: function () {
@@ -317,7 +312,7 @@ function editContactModal(contactId) {
 }
 
 
-// Funkcija za snimanje izmjena
+// Funkcija za snimanje izmjena editovanog kontakta
 function saveEditedContact(id) {
 
     // Provjera validnosti podataka

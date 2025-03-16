@@ -25,9 +25,6 @@ ScaffoldingReadMe.txt
 .vs/
 .vsconfig
 
-# App settings (sensitive data)
-appsettings*.json
-
 # Test results
 test-results/
 
