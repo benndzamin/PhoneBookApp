@@ -6,7 +6,6 @@
     margin: 0 auto;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.3); /* Dodaj sjenčanje za bolji kontrast */
     transition: all 0.3s ease; /* Dodaj prijelaz za glatke promjene boje */
-
     /*centriranje u parent elementu*/
     display: flex;
     align-items: center;
@@ -25,3 +24,82 @@
     transform: scale(1.2); /* Malo uvećaj kružić pri hoveru */
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Povećaj sjenčanje pri hoveru */
 }
+
+/* Tabela */
+table {
+    table-layout: fixed; /* Fiksna širina kolona */
+    width: 100%; /* Tabela koristi celu širinu svog parent elementa */
+}
+
+    /* Ograniči širinu ćelija */
+    table td, table th {
+        max-width: 300px;
+        min-width: min-content;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap; /* Sprečava prelazak u novi red */
+    }
+
+        /* Dodaj wrapper za hover/tooltip sa dugim tekstovima */
+        table td[data-bs-toggle="tooltip"] {
+            white-space: normal; /* Dozvoljava prelamanje teksta u tooltipu */
+        }
+
+        /* Širina 'firstName' kolone */
+        table td:nth-child(1), table th:nth-child(1) {
+            width: 160px;
+        }
+
+        /* Širina 'lastName' kolone */
+        table td:nth-child(2), table th:nth-child(2) {
+            width: 160px;
+        }
+
+        /* Širina 'phoneNumber' kolone */
+        table td:nth-child(3), table th:nth-child(3) {
+            width: 150px;
+        }
+
+        /* Širina 'GENDER' kolone */
+        table td:nth-child(4), table th:nth-child(4) {
+            width: 90px;
+        }
+
+        /* Širina 'AGE' kolone */
+        table td:nth-child(7), table th:nth-child(7) {
+            width: 70px;
+        }
+
+        /* Širina 'AGE' kolone */
+        table td:nth-child(9), table th:nth-child(9) {
+            width: 180px;
+        }
+
+        /* Širina 'action' kolone */
+        table td:nth-child(10), table th:nth-child(10) {
+            width: 145px;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
+
+.arrow {
+    margin-left: 5px;
+    font-size: 14px;
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border: solid black;
+    border-width: 0 3px 3px 0;
+    padding: 3px;
+    transform: rotate(225deg); /* Početni položaj strelice */
+    transition: transform 0.3s ease;
+}
+
+    .arrow.asc {
+        transform: rotate(225deg); /* Strelica okrenuta na dole */
+    }
+
+    .arrow.desc {
+        transform: rotate(45deg); /* Strelica okrenuta na gore */
+    }

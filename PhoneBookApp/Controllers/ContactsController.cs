@@ -15,13 +15,31 @@ namespace PhoneBookApp.Controllers
             _context = context;
         }
 
-        // GET: API endpoint za dohvaćanje svih kontakata za prikaz u tabeli
+        // GET: API endpoint za dohvaćanje svih kontakata za prikaz u tabeli s paginacijom
         [HttpGet]
-        public async Task<IActionResult> GetContacts()
+        public async Task<IActionResult> GetContacts(int page = 1, int resultsPerPage = 5, string sortColumn = "FirstName", string sortOrder = "asc")
         {
-            var contacts = await _context.Contacts
-                .Include(c => c.City)
-                .Include(c => c.Country)
+            // Izračunavanje početka za Skip
+            int skip = (page - 1) * resultsPerPage;
+
+            // Kreiraj dinamički izraz za sortiranje
+            IQueryable<Contact> query = _context.Contacts.Include(c => c.City).Include(c => c.Country);
+
+            // Dinamičko sortiranje na osnovu proslijeđene kolone i reda
+            switch (sortColumn)
+            {
+                case "FirstName":
+                    query = sortOrder == "asc" ? query.OrderBy(c => c.FirstName) : query.OrderByDescending(c => c.FirstName);
+                    break;
+                case "LastName":
+                    query = sortOrder == "asc" ? query.OrderBy(c => c.LastName) : query.OrderByDescending(c => c.LastName);
+                    break;
+            }
+
+            // Dohvatanje kontakata sa paginacijom
+            var contacts = await query
+                .Skip(skip)                // Preskoči prethodne stranice
+                .Take(resultsPerPage)      // Uzmi samo potrebne rezultate
                 .Select(c => new
                 {
                     c.Id,
@@ -37,7 +55,17 @@ namespace PhoneBookApp.Controllers
                 })
                 .ToListAsync();
 
-            return Json(contacts);
+            // Ukupan broj kontakata za izračunavanje ukupnih stranica
+            int totalContacts = await _context.Contacts.CountAsync();
+
+            // Kreiranje rezultata za paginaciju
+            var result = new
+            {
+                items = contacts,
+                totalPages = (int)Math.Ceiling((double)totalContacts / resultsPerPage)
+            };
+
+            return Json(result);
         }
 
         // GET: API endpoint za dohvaćanje jednog kontakta prema ID-u

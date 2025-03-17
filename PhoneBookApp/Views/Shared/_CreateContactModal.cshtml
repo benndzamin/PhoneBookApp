@@ -11,22 +11,27 @@
                     <div class="mb-2">
                         <label for="firstName" class="form-label mb-0">First Name</label>
                         <input type="text" class="form-control" id="firstName" required>
+                        <div class="invalid-feedback"><!--Error Message--></div>
                     </div>
                     <div class="mb-2">
                         <label for="lastName" class="form-label mb-0">Last Name</label>
                         <input type="text" class="form-control" id="lastName" required>
+                        <div class="invalid-feedback"><!--Error Message--></div>
                     </div>
                     <div class="mb-2">
                         <label for="phoneNumber" class="form-label mb-0">Phone Number</label>
                         <input type="text" class="form-control" id="phoneNumber" required>
+                        <div class="invalid-feedback"><!--Error Message--></div>
                     </div>
                     <div class="mb-2">
                         <label for="email" class="form-label mb-0">Email</label>
                         <input type="email" class="form-control" id="email" required>
+                        <div class="invalid-feedback"><!--Error Message--></div>
                     </div>
                     <div class="mb-2">
                         <label for="birthDate" class="form-label mb-0">Birth Date</label>
                         <input type="date" class="form-control" id="birthDate" required>
+                        <div class="invalid-feedback"><!--Error Message--></div>
                     </div>
                     <div class="mb-2">
                         <label for="gender" class="form-label mb-0">Gender</label>
@@ -35,16 +40,21 @@
                             <option value="1">Male</option>
                             <option value="0">Female</option>
                         </select>
+                        <div class="invalid-feedback"><!--Error Message--></div>
                     </div>
                     <div class="mb-0">
                         <label for="countryId" class="form-label mb-0">Country</label>
                         <select type="text" class="form-control" id="countryId" required>
+                            <option value="" disabled selected hidden>Select Country</option>
                         </select>
+                        <div class="invalid-feedback"><!--Error Message--></div>
                     </div>
                     <div class="mb-2">
                         <label for="cityId" class="form-label mb-0">City</label>
                         <select type="text" class="form-control" id="cityId" required>
+                            <option value="" disabled selected hidden>Select City</option>
                         </select>
+                        <div class="invalid-feedback"><!--Error Message--></div>
                     </div>
                 </form>
             </div>

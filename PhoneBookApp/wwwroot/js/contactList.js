@@ -8,8 +8,6 @@
         type: 'GET',
         success: function (data) {
             let countryDropdown = $('#countryId');
-            countryDropdown.empty();
-            countryDropdown.append($('<option>', { value: '', text: 'Select Country' }));
             $.each(data, function (index, country) {
                 countryDropdown.append($('<option>', {
                     value: country.value,
@@ -39,7 +37,7 @@
                 data: { countryId: countryId },
                 success: function (data) {
                     cityDropdown.prop('disabled', false); // Omogući dropdown za odabir grada
-                    cityDropdown.append($('<option>', { value: '', text: 'Select city' })); // Dodaj default opciju za odabir grada
+                    cityDropdown.append($('<option>', { value: '', text: 'Select city', disabled: true, selected: true, hidden: true })); // Dodaj default opciju za odabir grada
                     $.each(data, function (index, city) {
                         cityDropdown.append($('<option>', {
                             value: city.value,
@@ -55,6 +53,12 @@
     });
 });
 
+//defaultno stanje za sort i paginaciju
+let currentPage = 1;
+let resultsPerPage = 5;
+let sortColumn = "FirstName";
+let sortOrder = "asc"; 
+
 // Funkcija za dohvatanje svih kontakata
 function loadContacts() {
     $('#loadingIndicator').show();
@@ -62,25 +66,30 @@ function loadContacts() {
         url: '/Contacts/GetContacts',
         type: 'GET',
         dataType: 'json',
+        data: {
+            page: currentPage,
+            resultsPerPage: resultsPerPage,
+            sortColumn: sortColumn,
+            sortOrder: sortOrder
+        },
         success: function (data) {
             $('#loadingIndicator').hide();
 
             let tableBody = $('#contactsTable tbody');
             tableBody.empty();  // Očisti postojeće redove
-
-            $.each(data, function (index, contact) {
+            $.each(data.items, function (index, contact) {
                 let genderIcon = contact.gender === "Male"
                     ? '<span class="gender-icon male"></span>'
                     : '<span class="gender-icon female"></span>';
 
                 let row = `<tr id="contact-${contact.id}">
-                        <td class="p-3">${contact.firstName}</td>
-                        <td class="p-3">${contact.lastName}</td>
+                        <td class="p-3" data-bs-toggle="tooltip" title="${contact.firstName}">${contact.firstName}</td>
+                        <td class="p-3" data-bs-toggle="tooltip" title="${contact.lastName}">${contact.lastName}</td>
                         <td class="p-3">${contact.phoneNumber}</td>
-                        <td class="p-3">${genderIcon}</td>
-                        <td class="p-3">${contact.email}</td>
+                        <td class="p-3 text-center">${genderIcon}</td>
+                        <td class="p-3" data-bs-toggle="tooltip" title="${contact.email}">${contact.email}</td>
                         <td class="p-3">${contact.birthDate}</td>
-                        <td class="p-3">${contact.age}</td>
+                        <td class="p-3 text-center">${contact.age}</td>
                         <td class="p-3">${contact.city}</td>
                         <td class="p-3">${contact.country}</td>
                         <td class="p-auto">
@@ -91,12 +100,72 @@ function loadContacts() {
 
                 tableBody.append(row);
             });
+            // Update pagination buttons
+            updatePaginationButtons(data.totalPages);
         },
         error: function () {
             alert("Error loading contacts.");
         }
     });
 }
+
+// Funkcija za sortiranje rezultata po kolonama ima i prezime
+function sortTable(column) {
+    if (sortColumn === column) {
+        // Ako je ista kolona, menjamo redosled (asc/desc)
+        sortOrder = (sortOrder === "asc") ? "desc" : "asc";
+    } else {
+        // Ako je druga kolona, postavljamo sortiranje na asc
+        sortColumn = column;
+        sortOrder = "asc";
+    }
+    loadContacts();  // Ponovno učitaj kontakte sa novim parametrima
+
+    // Promeni strelicu u zavisnosti od sortiranja
+    updateArrowIcons();
+}
+
+// Funkcija za ažuriranje strelica asc/desc
+function updateArrowIcons() {
+    // Resetuj sve strelice
+    $('#firstNameArrow').removeClass('asc desc');
+    $('#lastNameArrow').removeClass('asc desc');
+
+    // Dodaj odgovarajuću klasu za strelicu
+    if (sortColumn === 'FirstName') {
+        $('#firstNameArrow').addClass(sortOrder);
+    } else if (sortColumn === 'LastName') {
+        $('#lastNameArrow').addClass(sortOrder);
+    }
+}
+
+//Update buttona za paginaciju
+function updatePaginationButtons(totalPages) {
+    $('#prevPage').prop('disabled', currentPage === 1);
+    $('#nextPage').prop('disabled', currentPage === totalPages);
+    $('#currentPage').text(`Page ${currentPage}`);
+}
+
+// Prethodna stranica
+$('#prevPage').on("click", function () {
+    if (currentPage > 1) {
+        currentPage--;
+        loadContacts();
+    }
+});
+
+// Sljedeća stranica
+$('#nextPage').on("click", function () {
+    currentPage++;
+    loadContacts();
+});
+
+// loaduje rezultate onchange dropdowna
+$('#resultsPerPage').on("change", function () {
+    resultsPerPage = parseInt($(this).val());
+    currentPage = 1;  // Resetuje na prvu stranu
+    loadContacts();
+});
 
 
 // Funkcija za otvaranje modala za kreiranje contacta "Add new contact"
@@ -146,68 +215,7 @@ function deletingFn() {
     }
 };
 
-// Funkcija za validaciju podataka
-function isValidInput() {
-    let firstName = $('#firstName').val().trim();
-    let lastName = $('#lastName').val().trim();
-    let phoneNumber = $('#phoneNumber').val().trim();
-    let email = $('#email').val().trim();
-    let birthDate = $('#birthDate').val().trim();
-    let gender = $('#gender').val();
-    let cityId = $('#cityId').val();
-    let countryId = $('#countryId').val();
 
-    // Regularni izrazi za validaciju
-    let nameRegex = /^[A-Za-zčćžšđČĆŽŠĐ ]+$/; // Samo slova i razmaci
-    let phoneRegex = /^[0-9]{3}\/[0-9]{3}-[0-9]{3}$/; // Format: 062/415-654
-    let emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/; // Standardna email validacija
-
-    // Provjera da polja nisu prazna
-    if (!firstName || !lastName || !phoneNumber || !email || !birthDate || !gender || !cityId || !countryId) {
-        alert('Please fill in all fields!');
-        return false;
-    }
-
-    // Validacija imena i prezimena
-    if (!nameRegex.test(firstName)) {
-        alert('First name can only contain letters!');
-        return false;
-    }
-    if (!nameRegex.test(lastName)) {
-        alert('Last name can only contain letters!');
-        return false;
-    }
-
-    // Validacija broja telefona
-    if (!phoneRegex.test(phoneNumber)) {
-        alert('Phone number must be in the format XXX/XXX-XXX !');
-        return false;
-    }
-
-    // Validacija emaila
-    if (!emailRegex.test(email)) {
-        alert('Please enter a valid email address!');
-        return false;
-    }
-
-    // Validacija datuma rođenja
-    let today = new Date();
-    let birthDateObj = new Date(birthDate);
-    let minBirthDate = new Date();
-    minBirthDate.setFullYear(today.getFullYear() - 100); // Prije 100 godina
-
-    if (birthDateObj > today) {
-        alert('Birth date cannot be in the future!');
-        return false;
-    }
-    if (birthDateObj < minBirthDate) {
-        alert('Birth date is not valid!');
-        return false;
-    }
-
-
-    return true;
-}
 
 
 // Funkcija za slanje podataka kada korisnik klikne "Save"
@@ -277,9 +285,6 @@ function editContactModal(contactId) {
                 $('#email').val(response.contact.email);
                 $('#birthDate').val(response.contact.birthDate.split('T')[0]);
                 $('#countryId').val(response.contact.countryId);
-
-                console.log("ovdje dođe: ");
-                console.log(response.contact);
 
                 // Popunjavanje dropdowna za gradove
                 let cityDropdown = $('#cityId').prop('disabled', false);
@@ -378,8 +383,82 @@ function showToast(message, type = 'success') {
 }
 
 
+// Funkcija za validaciju podataka
+function isValidInput() {
+    let firstName = $('#firstName').val().trim();
+    let lastName = $('#lastName').val().trim();
+    let phoneNumber = $('#phoneNumber').val().trim();
+    let email = $('#email').val().trim();
+    let birthDate = $('#birthDate').val().trim();
+    let gender = $('#gender').val();
+    let cityId = $('#cityId').val();
+    let countryId = $('#countryId').val();
 
-//formatiranje broja telefona u input polju
+    // Regularni izrazi za validaciju
+    let nameRegex = /^[A-Za-zčćžšđČĆŽŠĐ ]+$/; // Samo slova i razmaci
+    let phoneRegex = /^[0-9]{3}\/[0-9]{3}-[0-9]{3}$/; // Format: 062/415-654
+    let emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/; // Standardna email validacija
+
+    // Provjera da polja nisu prazna
+    if (!firstName || !lastName || !phoneNumber || !email || !birthDate || !gender || !cityId || !countryId) {
+        alert('Please fill in all fields!');
+        return false;
+    }
+
+    // Validacija imena i prezimena
+    if (!nameRegex.test(firstName)) {
+        alert('First name can only contain letters!');
+        return false;
+    }
+    if (!nameRegex.test(lastName)) {
+        alert('Last name can only contain letters!');
+        return false;
+    }
+
+    // Validacija dužine imena i prezimena (max 50 znakova)
+    if (firstName.length > 50) {
+        alert('First name must be less than or equal to 50 characters!');
+        return false;
+    }
+    if (lastName.length > 50) {
+        alert('Last name must be less than or equal to 50 characters!');
+        return false;
+    }
+
+    // Validacija broja telefona
+    if (!phoneRegex.test(phoneNumber)) {
+        alert('Phone number must be in the format XXX/XXX-XXX !');
+        return false;
+    }
+
+    // Validacija emaila
+    if (!emailRegex.test(email)) {
+        alert('Please enter a valid email address!');
+        return false;
+    }
+
+    // Validacija datuma rođenja
+    let today = new Date();
+    let birthDateObj = new Date(birthDate);
+    let minBirthDate = new Date();
+    minBirthDate.setFullYear(today.getFullYear() - 100); // Prije 100 godina
+
+    if (birthDateObj > today) {
+        alert('Birth date cannot be in the future!');
+        return false;
+    }
+    if (birthDateObj < minBirthDate) {
+        alert('Birth date is not valid!');
+        return false;
+    }
+
+    return true;
+}
+
+
+//Validacije ispod se izvršavaju na pojedinačna polja gdje korisnik tokom unosa u polje instantno dobija feedback o validnosti unosa
+
+//validiranje broja telefona u toku unosa u input polje phoneNumber
 $(document).on("input", "#phoneNumber", function () {
     let input = $(this).val().replace(/\D/g, '');
     let formatted = '';
@@ -397,4 +476,144 @@ $(document).on("input", "#phoneNumber", function () {
     }
 
     $(this).val(formatted);
+});
+
+//validacija polja firstName i lastName u toku unosa u polje za firstName i lastName
+$(document).on("input focusout", "#firstName, #lastName", function () {
+    let nameRegex = /^[A-Za-zčćžšđČĆŽŠĐ ]+$/; // Dozvoljena su samo slova i razmaci
+    let maxLength = 50; // Maksimalna dužina
+    let minLength = 1; // Minimalna dužina
+    let value = $(this).val().trim(); // Uklanja početne/završne razmake
+    !nameRegex.test(value)
+    if (!value) {
+        $(this).addClass("is-invalid"); // Dodaje crveni border
+        $(this).siblings(".invalid-feedback").text("Field cannot be empty!").show();
+    } else if (value.length > maxLength) {
+        $(this).val(value.substring(0, maxLength)); // Skraćuje unos
+        $(this).addClass("is-invalid");
+        $(this).siblings(".invalid-feedback").text("Maximum 50 characters allowed.").show();
+    } else if (!nameRegex.test(value)) {
+        $(this).addClass("is-invalid");
+        $(this).siblings(".invalid-feedback").text("Only letters and spaces are allowed!").show();
+    } else {
+        $(this).removeClass("is-invalid").addClass("is-valid"); // Skida crveni border
+        $(this).siblings(".invalid-feedback").text("").hide(); // Sakriva poruku
+    }
+});
+
+//validacija za input u polje phoneNumber
+$(document).on("input focusout", "#phoneNumber", function () {
+    let phoneRegex = /^[0-9]{3}\/[0-9]{3}-[0-9]{3}$/; // Format: XXX/XXX-XXX
+    let value = $(this).val().trim();
+
+    if (!value) {
+        $(this).addClass("is-invalid"); // Dodaje crveni border
+        $(this).siblings(".invalid-feedback").text("Phone number can not be empty!").show();
+    } else if(!phoneRegex.test(value)){
+        $(this).addClass("is-invalid"); // Dodaje crveni border
+        $(this).siblings(".invalid-feedback").text("Phone number must be in format XXX/XXX-XXX").show();
+    } else {
+        $(this).removeClass("is-invalid").addClass("is-valid"); // Skida crveni border
+        $(this).siblings(".invalid-feedback").text("").hide(); // Sakriva poruku
+    }
+});
+
+//validacija za input u polje email
+$(document).on("input focusout", "#email", function () {
+    let emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/; // Standardna email validacija
+    let value = $(this).val().trim();
+    if (!value) {
+        $(this).addClass("is-invalid"); // Dodaje crveni border
+        $(this).siblings(".invalid-feedback").text("Field can not be empty!").show();
+    } else if (!emailRegex.test(value)) {
+        $(this).addClass("is-invalid"); // Dodaje crveni border
+        $(this).siblings(".invalid-feedback").text("Invalid email format!").show();
+    } else {
+        $(this).removeClass("is-invalid").addClass("is-valid"); // Skida crveni border
+        $(this).siblings(".invalid-feedback").text("").hide(); // Sakriva poruku
+    }
+});
+
+// On input validacija za datum rođenja
+$(document).on("input focusout", "#birthDate", function () {
+    let birthDate = $(this).val().trim(); // Uzima uneseni datum
+    let today = new Date();
+    let birthDateObj = new Date(birthDate);
+    let minBirthDate = new Date();
+    minBirthDate.setFullYear(today.getFullYear() - 100); // Prije 100 godina
+
+    // Provjera da datum nije u budućnosti
+    if (birthDateObj > today) {
+        $(this).addClass("is-invalid");
+        $(this).siblings(".invalid-feedback").text("Birth date cannot be in the future!").show();
+        return false;
+    }
+
+    // Provjera da datum nije stariji od 100 godina
+    if (birthDateObj < minBirthDate) {
+        $(this).addClass("is-invalid");
+        $(this).siblings(".invalid-feedback").text("Birth date can not be older than 100 years!").show();
+        return false;
+    }
+
+    // Provjera da li je uopšte unešen
+    if (!birthDate) {
+        $(this).addClass("is-invalid");
+        $(this).siblings(".invalid-feedback").text("Birth date is required!").show();
+        return false;
+    }
+
+    // Ako je datum validan, ukloni crveni border i sakrij poruku
+    $(this).removeClass("is-invalid").addClass("is-valid");
+    $(this).siblings(".invalid-feedback").text("").hide();
+    return true;
+});
+
+// on input validacija da korisnik mora odabrati jedan spol
+$("#gender").on("input focusout", function () {
+    let feedbackElement = $(this).parent().find(".invalid-feedback");
+
+    if ($(this).val() === null || $(this).val() === "") {
+        $(this).addClass("is-invalid");
+        feedbackElement.text("You must choose gender.").show();
+    } else {
+        $(this).removeClass("is-invalid").addClass("is-valid");
+        feedbackElement.text("").hide();
+    }
+});
+
+// Validacija za country
+$("#countryId").on("input focusout", function () {
+    let feedbackElement = $(this).parent().find(".invalid-feedback");
+
+    if ($(this).val() === null || $(this).val() === "") {
+        $(this).addClass("is-invalid");
+        feedbackElement.text("You must choose country.").show();
+    } else {
+        $(this).removeClass("is-invalid").addClass("is-valid");
+        feedbackElement.text("").hide();
+    }
+});
+
+// Validacija za city
+$("#cityId").on("input focusout", function () {
+    let feedbackElement = $(this).parent().find(".invalid-feedback");
+
+    if ($(this).val() === null || $(this).val() === "") {
+        $(this).addClass("is-invalid");
+        feedbackElement.text("You must choose city.").show();
+    } else {
+        $(this).removeClass("is-invalid").addClass("is-valid");
+        feedbackElement.text("").hide();
+    }
+});
+
+//uklanjanje poruka validacije na zatvaranju modala
+$('#createContactModal').on('hidden.bs.modal', function () {
+    // Uklanja crveni border sa svih input polja
+    $(this).find(".is-invalid").removeClass("is-invalid");
+    $(this).find(".is-valid").removeClass("is-valid");
+
+    // Sakriva sve poruke greške
+    $(this).find(".invalid-feedback").text("").hide();
 });

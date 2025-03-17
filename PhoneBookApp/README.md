@@ -40,14 +40,7 @@ Aplikacija koristi ASP.NET Core, Entity Framework Core, Linq, Microsoft SQL Serv
   "DefaultConnection": "Server=YOUR_SERVER_NAME;Database=PhoneBookDB;Trusted_Connection=True;TrustServerCertificate=True;"
 }
 
-4. Kreirajte i primenite migracije baze podataka:
-
-    ```bash
-    dotnet ef migrations add InitialCreate
-    dotnet ef database update
-    ```
-
-5. Pokrenite aplikaciju:
+4. Pokrenite aplikaciju:
 
     ```bash
     dotnet run
@@ -60,12 +53,13 @@ Nakon što pokrenete aplikaciju, moći ćete da:
 - Pogledate listu kontakata.
 - Dodate novi kontakt koristeći ponuđeni obrazac.
 - Uredite i obrišete postojeće kontakte.
+- Sortirate listu kontakata
 
 ### API Endpoints
 
 Aplikacija ima sledeće API endpoint-e:
 
-- **GET /contacts/getContacts**: Dohvati sve kontakte.
+- **GET /contacts/getContacts**: Dohvati sve kontakte i sortira po imenu/prezimenu/asc/desc.
 - **GET /contacts/getCountries**: Dohvati sve sve države.
 - **GET /Contacts/GetCitiesByCountry**: Dohvati sve sve gradove po izabranoj državi.
 - **GET /contacts/getContactById/{id}**: Dohvati specifičan kontakt po ID-u.
