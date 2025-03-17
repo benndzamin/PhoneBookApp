@@ -33,11 +33,8 @@ table {
 
     /* Ograniči širinu ćelija */
     table td, table th {
-        max-width: 300px;
-        min-width: min-content;
-        overflow: hidden;
-        text-overflow: ellipsis;
         white-space: nowrap; /* Sprečava prelazak u novi red */
+        text-overflow: ellipsis;
     }
 
         /* Dodaj wrapper za hover/tooltip sa dugim tekstovima */
@@ -47,42 +44,47 @@ table {
 
         /* Širina 'firstName' kolone */
         table td:nth-child(1), table th:nth-child(1) {
-            width: 160px;
+            width: 120px;
         }
 
         /* Širina 'lastName' kolone */
         table td:nth-child(2), table th:nth-child(2) {
-            width: 160px;
+            width: 120px;
         }
-
         /* Širina 'phoneNumber' kolone */
         table td:nth-child(3), table th:nth-child(3) {
+            width: 120px;
+        }
+        /* Širina 'gender' kolone */
+        table td:nth-child(4), table th:nth-child(4) {
+            width: 80px;
+        }
+        /* Širina 'email' kolone */
+        table td:nth-child(5), table th:nth-child(5) {
+            width: 180px;
+        }
+        /* Širina 'birthDate' kolone */
+        table td:nth-child(6), table th:nth-child(6) {
+            width: 125px;
+        }
+        /* Širina 'age' kolone */
+        table td:nth-child(7), table th:nth-child(7) {
+            width: 50px;
+        }
+        /* Širina 'city' kolone */
+        table td:nth-child(8), table th:nth-child(8) {
+            width: 110px;
+        }
+        /* Širina 'country' kolone */
+        table td:nth-child(9), table th:nth-child(9) {
+            width: 150px;
+        }
+        /* Širina 'actions' kolone */
+        table td:nth-child(10), table th:nth-child(10) {
             width: 150px;
         }
 
-        /* Širina 'GENDER' kolone */
-        table td:nth-child(4), table th:nth-child(4) {
-            width: 90px;
-        }
-
-        /* Širina 'AGE' kolone */
-        table td:nth-child(7), table th:nth-child(7) {
-            width: 70px;
-        }
-
-        /* Širina 'AGE' kolone */
-        table td:nth-child(9), table th:nth-child(9) {
-            width: 180px;
-        }
-
-        /* Širina 'action' kolone */
-        table td:nth-child(10), table th:nth-child(10) {
-            width: 145px;
-            white-space: nowrap;
-            overflow: hidden;
-        }
-
-
+/* strelice za sortiranje */
 .arrow {
     margin-left: 5px;
     font-size: 14px;
@@ -95,6 +97,9 @@ table {
     transform: rotate(225deg); /* Početni položaj strelice */
     transition: transform 0.3s ease;
 }
+
+    .arrow:hover {
+    }
 
     .arrow.asc {
         transform: rotate(225deg); /* Strelica okrenuta na dole */

@@ -83,16 +83,16 @@ function loadContacts() {
                     : '<span class="gender-icon female"></span>';
 
                 let row = `<tr id="contact-${contact.id}">
-                        <td class="p-3" data-bs-toggle="tooltip" title="${contact.firstName}">${contact.firstName}</td>
-                        <td class="p-3" data-bs-toggle="tooltip" title="${contact.lastName}">${contact.lastName}</td>
-                        <td class="p-3">${contact.phoneNumber}</td>
-                        <td class="p-3 text-center">${genderIcon}</td>
-                        <td class="p-3" data-bs-toggle="tooltip" title="${contact.email}">${contact.email}</td>
-                        <td class="p-3">${contact.birthDate}</td>
-                        <td class="p-3 text-center">${contact.age}</td>
-                        <td class="p-3">${contact.city}</td>
-                        <td class="p-3">${contact.country}</td>
-                        <td class="p-auto">
+                        <td class="p-3 text-truncate" data-bs-toggle="tooltip" title="${contact.firstName}">${contact.firstName}</td>
+                        <td class="p-3 text-truncate" data-bs-toggle="tooltip" title="${contact.lastName}">${contact.lastName}</td>
+                        <td class="p-3 text-truncate">${contact.phoneNumber}</td>
+                        <td class="p-3 text-truncate">${genderIcon}</td>
+                        <td class="p-3 text-truncate" data-bs-toggle="tooltip" title="${contact.email}">${contact.email}</td>
+                        <td class="p-3 text-truncate">${contact.birthDate}</td>
+                        <td class="p-3 text-truncate">${contact.age}</td>
+                        <td class="p-3 text-truncate">${contact.city}</td>
+                        <td class="p-3 text-truncate">${contact.country}</td>
+                        <td class="p-auto w-15 text-truncate">
                             <button class="btn btn-info shadow" onclick="editContactModal(${contact.id})">Edit</button>
                             <button class="btn btn-danger shadow" onclick="openDeleteModal(${contact.id}, '${contact.firstName}', '${contact.lastName}')">Delete</button>
                         </td>
